@@ -1,0 +1,16 @@
+automata
+.DS_Store
+.vscode/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+build/
+cmake_install.cmake
+.vs/
+x64/
+.ninja_deps
+.ninja_log
+__attic/
+build.ninja
+
+*.bmp
