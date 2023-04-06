@@ -1,5 +1,9 @@
 # Automata
 
+**Automata simulator written in C++ and SDL2**
+
+Currently only one experimental implementation of a Game Of Life clone is implemented.
+
 ## Prerequisites
 
 ### macOS
