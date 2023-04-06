@@ -1,14 +1,26 @@
 #include <cstdlib>
 #include <iostream>
 #include <chrono>
+#include <random>
 
 #include <SDL2/SDL.h>
 
 #include "game-of-life.hpp"
+#include "app.hpp"
 
-constexpr int WIDTH = 1024;
-constexpr int HEIGHT = 768;
-constexpr int SCALE = 3;
+games::game_of_life game(WIDTH / SCALE, HEIGHT / SCALE);
+std::mt19937 rng;
+
+void irritate(int x, int y)
+{
+    for (int dy = -1; dy <= 1; ++dy)
+    {
+        for (int dx = -1; dx <= 1; ++dx)
+        {
+            game.set(x + dx, y + dy, (rng() & 1) == 0 ? games::game_of_life::DEAD : games::game_of_life::ALIVE);
+        }
+    }
+}
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
@@ -28,13 +40,14 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
     SDL_FillRect(surface, NULL, 0x00000000);
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_BLEND);
+    SDL_RenderSetVSync(renderer, 1);
     bool do_close = false;
     bool paused = false;
-    games::game_of_life game(WIDTH / SCALE, HEIGHT / SCALE);
     game.populate();
     auto clock = std::chrono::high_resolution_clock();
     auto t0 = clock.now();
     long long num_frames = 0;
+    bool mouse_down = false;
     while (!do_close)
     {
         if (!paused)
@@ -59,6 +72,31 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
         {
             switch (event.type)
             {
+            case SDL_MOUSEBUTTONDOWN:
+                if (event.button.button == 1)
+                {
+                    mouse_down = true;
+                    int x = event.motion.x / SCALE;
+                    int y = event.motion.y / SCALE;
+                    irritate(x, y);
+                }
+                break;
+            case SDL_MOUSEBUTTONUP:
+                if (event.button.button == 1)
+                {
+                    mouse_down = false;
+                }
+                break;
+            case SDL_MOUSEMOTION:
+            {
+                if (mouse_down)
+                {
+                    int x = event.motion.x / SCALE;
+                    int y = event.motion.y / SCALE;
+                    irritate(x, y);
+                }
+            }
+            break;
             case SDL_QUIT:
                 // handling of close button
                 do_close = true;
@@ -98,7 +136,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
             auto dt = t1 - t0;
             auto fps = 10LL * 1'000'000'000LL / dt.count();
             t0 = t1;
-            std::cout << '\r' << fps << " fps\u001b[K" << std::flush;
+            // std::cout << '\r' << fps << " fps\u001b[K" << std::flush;
         }
     }
 

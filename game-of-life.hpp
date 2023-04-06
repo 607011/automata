@@ -19,28 +19,23 @@ namespace games
 
     class game_of_life
     {
-        enum cell_state {
-            DEAD,
-            ALIVE,
-        };
         static constexpr uint32_t ALIVE_COLOR = 0xfff01020;
         static constexpr uint32_t DEAD_COLOR = 0xffcc8000;
 
     public:
+        enum cell_state
+        {
+            DEAD,
+            ALIVE,
+        };
+
         game_of_life() = delete;
         game_of_life(int width, int height)
             : width(width), height(height)
         {
             plane_a = std::make_unique<std::vector<cell_state>>(width * height, DEAD);
             plane_b = std::make_unique<std::vector<cell_state>>(width * height, DEAD);
-            neighbors[0] = -1 - width;
-            neighbors[1] = -width;
-            neighbors[2] = 1 - width;
-            neighbors[3] = 1;
-            neighbors[4] = 1 + width;
-            neighbors[5] = width;
-            neighbors[6] = width - 1;
-            neighbors[7] = -1;
+            neighbors = { -1 - width, -width, 1 - width, 1, 1 + width, width, width - 1, -1};
             rng.seed(static_cast<uint32_t>(util::make_seed()));
             // warmup RNG
             for (int i = 0; i < 10'000; ++i)
