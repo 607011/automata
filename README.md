@@ -1,5 +1,14 @@
 # Automata
 
+## Prerequisites
+
+### macOS
+
+```
+brew install sdl2
+```
+
+
 ## Build
 
 ```
