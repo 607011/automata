@@ -4,6 +4,8 @@
 
 Currently only one experimental implementation of a Game Of Life clone is implemented.
 
+![Game Of Life](gol-preview.png)
+
 ## Prerequisites
 
 ### macOS
