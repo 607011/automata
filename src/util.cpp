@@ -12,6 +12,16 @@
 
 #include <random>
 
+std::string util::iso_datetime_now()
+{
+    time_t now;
+    time(&now);
+    char buf[sizeof("20230318T091601")];
+    strftime(buf, sizeof(buf), "%Y%m%dT%H%M%S", gmtime(&now));
+    return std::string(buf);
+}
+
+
 unsigned long util::make_seed()
 {
     auto a = static_cast<unsigned long>(time(nullptr));
