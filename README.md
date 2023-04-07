@@ -1,6 +1,6 @@
 # Automata
 
-**Automata simulator written in C++ and SDL2**
+**Automata simulator written in C++ using SDL2**
 
 Currently only an experimental implementation of a Game Of Life clone is implemented.
 
